@@ -2,11 +2,19 @@ import { Item, RoseGarden } from "@/rose-garden";
 
 describe("Rose Garden", () => {
   describe("Aged Brie", () => {
-    it("quality increases by 2 everyday", () => {
-      const roseGarden = new RoseGarden([new Item("Aged Brie", 0, 0)]);
+    it("quality increases by 1 with positive sellIn", () => {
+      const roseGarden = new RoseGarden([new Item("Aged Brie", 3, 0)]);
       const items = roseGarden.updateQuality();
       expect(items[0].name).toBe("Aged Brie");
-      expect(items[0].sellIn).toEqual(-1);
+      expect(items[0].sellIn).toEqual(2);
+      expect(items[0].quality).toEqual(1);
+    });
+
+    it("quality increases by 2 with negative sellIn", () => {
+      const roseGarden = new RoseGarden([new Item("Aged Brie", -1, 0)]);
+      const items = roseGarden.updateQuality();
+      expect(items[0].name).toBe("Aged Brie");
+      expect(items[0].sellIn).toEqual(-2);
       expect(items[0].quality).toEqual(2);
     });
 
@@ -24,6 +32,14 @@ describe("Rose Garden", () => {
       expect(items[0].name).toBe("Aged Brie");
       expect(items[0].sellIn).toEqual(-2);
       expect(items[0].quality).toEqual(2);
+    });
+
+    it("quality remains the same if over 50", () => {
+      const roseGarden = new RoseGarden([new Item("Aged Brie", 0, 52)]);
+      const items = roseGarden.updateQuality();
+      expect(items[0].name).toBe("Aged Brie");
+      expect(items[0].sellIn).toEqual(-1);
+      expect(items[0].quality).toEqual(52);
     });
   });
 
@@ -78,6 +94,16 @@ describe("Rose Garden", () => {
       expect(items[0].name).toBe("Backstage passes to a TAFKAL80ETC concert");
       expect(items[0].sellIn).toEqual(4);
       expect(items[0].quality).toEqual(3);
+    });
+
+    it("quality remains the same if over 50", () => {
+      const roseGarden = new RoseGarden([
+        new Item("Backstage passes to a TAFKAL80ETC concert", 3, 52),
+      ]);
+      const items = roseGarden.updateQuality();
+      expect(items[0].name).toBe("Backstage passes to a TAFKAL80ETC concert");
+      expect(items[0].sellIn).toEqual(2);
+      expect(items[0].quality).toEqual(52);
     });
 
     it("quality drops to 0 after concert", () => {
