@@ -50,6 +50,16 @@ describe("Rose Garden", () => {
   });
 
   describe("Backstage passes", () => {
+    it("quality increases by 1 when there are more than 10 days", () => {
+      const roseGarden = new RoseGarden([
+        new Item("Backstage passes to a TAFKAL80ETC concert", 11, 0),
+      ]);
+      const items = roseGarden.updateQuality();
+      expect(items[0].name).toBe("Backstage passes to a TAFKAL80ETC concert");
+      expect(items[0].sellIn).toEqual(10);
+      expect(items[0].quality).toEqual(1);
+    });
+
     it("quality increases by 2 when there are 10 days or less", () => {
       const roseGarden = new RoseGarden([
         new Item("Backstage passes to a TAFKAL80ETC concert", 10, 0),
@@ -73,6 +83,16 @@ describe("Rose Garden", () => {
     it("quality drops to 0 after concert", () => {
       const roseGarden = new RoseGarden([
         new Item("Backstage passes to a TAFKAL80ETC concert", 0, 10),
+      ]);
+      const items = roseGarden.updateQuality();
+      expect(items[0].name).toBe("Backstage passes to a TAFKAL80ETC concert");
+      expect(items[0].sellIn).toEqual(-1);
+      expect(items[0].quality).toEqual(0);
+    });
+
+    it("quality cannot be negative", () => {
+      const roseGarden = new RoseGarden([
+        new Item("Backstage passes to a TAFKAL80ETC concert", 0, 0),
       ]);
       const items = roseGarden.updateQuality();
       expect(items[0].name).toBe("Backstage passes to a TAFKAL80ETC concert");
